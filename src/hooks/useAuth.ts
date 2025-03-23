@@ -1,17 +1,26 @@
 "use client";
 
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore, User } from "@/store/auth";
+import { logout as logoutAPI } from "@/api/auth";
+import { useRouter } from "next/navigation";
 
 export const useAuth = () => {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const user = useAuthStore((state) => state.user);
-  const accessToken = useAuthStore((state) => state.accessToken);
-  const login = useAuthStore((state) => state.login);
-  const logout = useAuthStore((state) => state.logout);
+  const { isLoggedIn, user, accessToken, login, logout } = useAuthStore();
+  const router = useRouter();
+
+  const handleLogin = (user: User, token: string) => {
+    login(user, token);
+  };
+
+  const handleLogout = async () => {
+    logoutAPI();
+    logout(); // Zustand 상태 초기화
+    router.push("/login");
+  };
 
   return {
     auth: { isLoggedIn, user, accessToken },
-    login,
-    logout,
+    login: handleLogin,
+    logout: handleLogout,
   };
 };
