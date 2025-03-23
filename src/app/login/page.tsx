@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login as loginAPI } from "@/api/auth";
-import { useAuthStore } from "@/store/auth";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
@@ -21,6 +20,14 @@ export default function LoginPage() {
     } catch {
       alert("로그인 실패!");
     }
+  };
+
+  const handleKakaoLogin = () => {
+    const clientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID!;
+    const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+
+    window.location.href = kakaoAuthUrl;
   };
 
   return (
@@ -45,6 +52,25 @@ export default function LoginPage() {
       >
         로그인
       </button>
+      <hr className="my-6" />
+
+      <div className="flex flex-col gap-2">
+        <button
+          onClick={handleKakaoLogin}
+          className="bg-yellow-300 text-black px-4 py-2 rounded"
+        >
+          🟡 카카오로 로그인
+        </button>
+
+        <button
+          onClick={() => {
+            window.location.href = "http://localhost:5000/auth/google";
+          }}
+          className="bg-white text-black border px-4 py-2 rounded"
+        >
+          🔴 구글로 로그인
+        </button>
+      </div>
     </div>
   );
 }

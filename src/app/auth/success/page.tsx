@@ -19,7 +19,7 @@ export default function AuthSuccessPage() {
       return;
     }
 
-    // ✅ 토큰으로 유저 정보 요청
+    // 토큰으로 유저 정보 요청
     api
       .get("/user/profile", {
         headers: {
@@ -27,7 +27,7 @@ export default function AuthSuccessPage() {
         },
       })
       .then((res) => {
-        login(res.data.user, token); // ✅ Zustand에 저장
+        login(res.data.user, token); // Zustand에 저장
         router.push("/");
       })
       .catch((err) => {
